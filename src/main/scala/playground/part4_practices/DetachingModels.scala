@@ -9,6 +9,13 @@ import scala.collection.mutable
 
 object DetachingModels extends App {
 
+  /*
+    Domain model = events our ctor thinks it persist
+    Data model = objects which actually get persisted
+    Good practice: make the two models independent
+    Awesome side effect: easier schema evolution
+   */
+
   class CouponManager extends PersistentActor with ActorLogging {
     import DomainModel._
 

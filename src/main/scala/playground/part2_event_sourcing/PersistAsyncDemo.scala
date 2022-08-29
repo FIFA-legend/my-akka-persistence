@@ -55,6 +55,14 @@ object PersistAsyncDemo extends App {
 
     persist vs persistAsync
     - ordering guarantees
+    - mutation of the state
+   */
+
+  /*
+    persistAsync guarantees:
+    - persist calls happen in order
+    - persist callbacks are called in order
+    - no other guarantees: new messages may be handled in the time gaps
    */
 
 }

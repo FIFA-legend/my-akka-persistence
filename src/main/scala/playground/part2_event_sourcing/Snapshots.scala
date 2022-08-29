@@ -77,7 +77,7 @@ object Snapshots extends App {
       commandsWithoutCheckpoint += 1
       if (commandsWithoutCheckpoint >= MAX_MESSAGES) {
         log.info("Saving checkpoint...")
-        saveSnapshot(lastMessages) // asynchronous operation
+        saveSnapshot(lastMessages) // asynchronous operation // contents have to be serializable
         commandsWithoutCheckpoint = 0
       }
     }

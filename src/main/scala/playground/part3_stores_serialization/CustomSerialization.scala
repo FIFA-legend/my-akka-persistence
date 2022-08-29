@@ -14,7 +14,7 @@ case class UserRegistered(id: Int, email: String, name: String)
 class UserRegistrationSerializer extends Serializer {
   val SEPARATOR = "//"
 
-  override def identifier: Int = 53278
+  override def identifier: Int = 53278 // 0-40 are for Akka internal usage
 
   override def toBinary(o: AnyRef): Array[Byte] = o match {
     case event @ UserRegistered(id, email, name) =>

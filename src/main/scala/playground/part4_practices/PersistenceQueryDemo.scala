@@ -13,6 +13,20 @@ import scala.util.Random
 
 object PersistenceQueryDemo extends App {
 
+  /*
+    Persistent stores are also used for reading data
+    Queries:
+    - select persistent IDs
+    - select events by persistence ID
+    - select events across persistence IDs, by tags
+
+    Use cases:
+    - which persistent actors are active
+    - recreate older states
+    - track how we arrived to the current state
+    - data processing on events in the entire store
+   */
+
   val system = ActorSystem("PersistenceQueryDemo", ConfigFactory.load().getConfig("persistenceQuery"))
 
   // read journal
@@ -50,7 +64,7 @@ object PersistenceQueryDemo extends App {
   }
 
   // events by persistence ID
-  val events = readJournal.eventsByPersistenceId("persistence-query-id-1", 0, Long.MaxValue)
+  val events = readJournal.eventsByPersistenceId("persistence-query-id-1", 0, Long.MaxValue) // order guaranteed
   events.runForeach { event =>
     println(s"Read event: $event")
   }
@@ -70,7 +84,7 @@ object PersistenceQueryDemo extends App {
 
     override def receiveCommand: Receive = {
       case Playlist(songs) =>
-        persist(PlaylistPurchased(latestPlaylistId, songs)) { event =>
+        persist(PlaylistPurchased(latestPlaylistId, songs)) { _ =>
           log.info(s"User purchased: $songs")
           latestPlaylistId += 1
         }
@@ -107,7 +121,7 @@ object PersistenceQueryDemo extends App {
     checkoutActor ! Playlist(songs.toList)
   }
 
-  val rockPlaylists = readJournal.eventsByTag("rock", Offset.noOffset)
+  val rockPlaylists = readJournal.eventsByTag("rock", Offset.noOffset) // order not guaranteed
   rockPlaylists.runForeach { event =>
     println(s"Found a playlist with a rock song: $event")
   }

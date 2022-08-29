@@ -11,7 +11,7 @@ object PersistentActors extends App {
     Scenario: we have a business and an accountant which keeps track of our invoices.
    */
 
-  // COMMAND
+  // COMMANDS
   case class Invoice(recipient: String, date: Date, amount: Int)
   case class InvoiceBulk(invoices: List[Invoice])
 
@@ -26,7 +26,8 @@ object PersistentActors extends App {
     var latestInvoiceId = 0
     var totalAmount = 0
 
-    override def persistenceId: String = "simple-accountant" // best practiceL make it unique
+    // how events are identified (unique per each actor)
+    override def persistenceId: String = "simple-accountant" // best practice: make it unique
 
     /**
       * The "normal" receive method
@@ -142,6 +143,16 @@ object PersistentActors extends App {
     *
     * Best practice: define your own "shutdown" messages
     */
-//  accountant ! PoisonPill
+//  accountant ! PoisonPill // PoisonPill (or Kill) can kill the actor while it is persisting events
   accountant ! Shutdown
+
+  /*
+    onPersistFailure
+    - called when sending the event fails
+    - actor is STOPPED
+
+    onPersistRejected
+    - called when the journal fails to write an event
+    - actor is RESUMED
+   */
 }

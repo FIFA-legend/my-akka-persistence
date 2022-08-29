@@ -22,7 +22,7 @@ object RecoveryDemo extends App {
         }
     }
 
-    override def receiveRecover: Receive = {
+    override def receiveRecover: Receive = { // receiveRecover is used during the whole recovery
       case RecoveryCompleted =>
         // additional initialization
         log.info("I have finished recovering")
@@ -57,6 +57,7 @@ object RecoveryDemo extends App {
     recoveryActor ! Command(s"Command $i")
   }
   // ALL COMMANDS SENT DURING RECOVERY ARE STASHED
+  // At first, all messages are recovered, after that commands are processed
 
   /*
     2 - failure during recovery

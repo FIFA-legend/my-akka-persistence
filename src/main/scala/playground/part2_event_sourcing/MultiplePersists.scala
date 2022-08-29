@@ -72,13 +72,20 @@ object MultiplePersists extends App {
 
   /*
     The message ordering (TaxRecord -> InvoiceRecord) is GUARANTEED.
+    Journal is some sort of actor. Messages are sent to journal via "tell" method.
+    So the order is guaranteed.
    */
 
   /**
     * PERSISTENCE IS ALSO BASED ON MESSAGE PASSING.
     */
 
-  // nested persisting (executed after the enclosing persist)
+  // inner "persist" call is executed after the outer "persist" call
   accountant ! Invoice("The Supercar Company", new Date, 20004302)
+
+  /*
+    Calls to persist() are executed IN ORDER
+    Handlers for subsequent persist() calls are executed IN ORDER
+   */
 
 }

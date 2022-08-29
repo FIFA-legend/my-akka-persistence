@@ -73,4 +73,13 @@ object EventAdapters extends App {
 //  }
   inventoryManager ! "print"
 
+  /*
+    If we start using a new version of event without any adapters then InvalidClassException will be thrown on recovery.
+
+    Plan:
+    1. Create a new version of event and change logic in actor
+    2. Create ReadEventAdapter that will convert events of old version to events of new version
+    3. Register adapter in application.conf
+   */
+
 }

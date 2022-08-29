@@ -35,7 +35,7 @@ object PersistentActorsExercise extends App {
            */
           persist(vote) { _ => // COMMAND sourcing
             log.info(s"Persisted: $vote")
-            handleInternalStateChange(vote.citizenPID, vote.candidate)
+            handleInternalStateChange(citizenPID, candidate)
           }
         } else {
           log.warning(s"Citizen $citizenPID is trying to vote multiple times!")
